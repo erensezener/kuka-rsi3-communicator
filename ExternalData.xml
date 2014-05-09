@@ -1,11 +1,8 @@
-<Sen Type="CoRob" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ExternalData.xsd">
-   <Dat TaskType="b">
-      <EStr>Info: ERX Message!</EStr>
-      <RKorr X="0.0000" Y="0.0000" Z="0.0000" A="0.0000" B="0.0000" C="0.0000" />
-      <AKorr A1="0.0000" A2="0.0000" A3="0.0000" A4="0.0000" A5="0.0000" A6="0.0000" />
-      <EKorr E1="0.0000" E2="0.0000" E3="0.0000" E4="0.0000" E5="0.0000" E6="0.0000" />
-      <Tech x="1" p3="0.0000" p4="0.0000" p5="0.0000" p3x1="0.0000" p4x1="0.0000" p5x1="0.0000" p3x2="0.0000" p4x2="0.0000" p5x2="0.0000" p3x3="0.0000" p4x3="0.0000" p5x3="0.0000" />
-      <DiO>0</DiO>
-      <IPOC>0000000000</IPOC>
-   </Dat>
+<Sen Type="ImFree">
+  <EStr>KRCnexxt - RSI Object ST_ETHERNET</EStr>
+  <RKorr X="0.0000" Y="0.0000" Z="0.0000" A="0.0000" B="0.0000" C="0.0000" />
+  <AKorr A1="0.0000" A2="0.0000" A3="0.0000" A4="0.0000" A5="0.0000" A6="0.0100" />
+  <Tech T21="1.09" T22="2.08" T23="3.07" T24="4.06" T25="5.05" T26="6.04" T27="7.03" T28="8.02" T29="9.01" T210="10.00"/>
+  <DiO>125</DiO>
+ <IPOC>0000000000</IPOC>
 </Sen>
