@@ -5,20 +5,25 @@ UDP_PORT = 49152 # Port of the External PC
 BUFFER_SIZE = 1024
 XML_FILE_NAME = "ExternalData.xml"
 
-def main():
+def run_server(connection):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Create a UDP socket
     sock.bind((UDP_IP, UDP_PORT))
+    xml_file = open(XML_FILE_NAME, "r")
+    default_command = xml_file.read()
 
     while True:
-        xml_file = open(XML_FILE_NAME, "r")
 
         received_data, socket_of_krc = sock.recvfrom(BUFFER_SIZE) # buffer size is 1024 bytes
         print received_data
-        data_to_send = xml_file.read()
+        if not connection.empty():
+            data_to_send = connection.recv()
+        else: # send the default
+            data_to_send = default_command
         data_to_send = mirror_timestamp(received_data, data_to_send)
-
         sock.sendto(data_to_send, socket_of_krc)
-        xml_file.close()
+
+    xml_file.close()
+
 
 # Updates the timestamp of the data to send based on the timestamp of the received data
 def mirror_timestamp(received_data, data_to_send):
@@ -33,4 +38,4 @@ def mirror_timestamp(received_data, data_to_send):
     return data_to_send.replace("<IPOC>"+old_ipoc+"</IPOC>", "<IPOC>"+received_ipoc+"</IPOC>")
 
 if __name__ == "__main__":
-    main()
+    run_server()
