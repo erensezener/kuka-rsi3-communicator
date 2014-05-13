@@ -20,7 +20,7 @@ import client
 #     conn.send([42, None, 'hello'])
 #     conn.close()
 
-if __name__ == '__main__':
+def main():
     parent_connection, child_connection = Pipe()
     # p = Process(target=f, args=(child_connection,))
     # p.start()
@@ -28,3 +28,6 @@ if __name__ == '__main__':
     # p.join()
     server_process = Process(target=server.run_server, args=(parent_connection,))
     client_process = Process(target=client.run_client, args=(child_connection,))
+
+if __name__ == '__main__':
+    main()

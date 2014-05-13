@@ -1,2 +1,6 @@
 
 client.pyc
+.idea/workspace.xml
+.idea/misc.xml
+*.pyc
+*.iml
