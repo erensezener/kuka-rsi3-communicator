@@ -11,13 +11,11 @@ Dependencies:
 Known bugs: -
 
 """
-
-
-def get_default_string():
-    xml_file = open("ExternalData.xml", "r")
-    default_command = xml_file.read()
-    return default_command
-
+HEADER = '<Sen Type=\"ImFree\"><EStr>KRCnexxt - RSI Object ST_ETHERNET</EStr>'
+FOOTER = '<Tech T21=\"1.09\" T22=\"2.08\" T23=\"3.07\" T24=\"4.06\" T25=\"5.05\" T26=\"6.04\" T27=\"7.03\" ' \
+         'T28=\"8.02\" T29=\"9.01\" T210=\"10.00\"/><DiO>125</DiO><IPOC>0000000000</IPOC></Sen>'
+DEFAULT_RKORR = '<RKorr X=\"0.0000\" Y=\"0.0000\" Z=\"0.0000\" A=\"0.0000\" B=\"0.0000\" C=\"0.0000\"/>'
+DEFAULT_AKORR = '<AKorr A1=\"0.0000\" A2=\"0.0000\" A3=\"0.0000\" A4=\"0.0000\" A5=\"0.0000\" A6=\"0.0000\"/>'
 
 def is_terminate_command(input_text):
     if input_text == 'q' or input_text == 'Q':
@@ -49,20 +47,25 @@ def get_akorr_string(command_list):
            command_list[3] + '\" A5=\"' + command_list[4] + '\" A6=\"' + command_list[5] + '\" />'
 
 
-def create_command_string(command_list):
+def create_command_string(type, command_list):
     if type == 'r':
-        
+        return HEADER + get_rkorr_string(command_list) + DEFAULT_AKORR + FOOTER
+    elif type == 'a':
+        return HEADER + DEFAULT_RKORR + get_akorr_string(command_list) + FOOTER
+
 
 
 def run_client(connection):
-    default_string = get_default_string()
     while True:
-        input_text = raw_input()
+        input_text = raw_input("Please write the coordinates: ")
         type, command_list = process_text(input_text)
         if type is not None:
             string_to_send = create_command_string(type, command_list)
+            print "Sending"
+            print string_to_send
             connection.send(string_to_send)
         elif is_terminate_command(input_text):
-            break
+            print "Terminating"
+            return
         else:
             print "The command is not valid."

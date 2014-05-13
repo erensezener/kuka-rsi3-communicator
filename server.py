@@ -1,6 +1,7 @@
 import socket
+import sys
 
-UDP_IP = "10.100.48.101" # IP Address of the External PC
+UDP_IP = '127.0.0.1' # IP Address of the External PC
 UDP_PORT = 49152 # Port of the External PC
 BUFFER_SIZE = 1024
 XML_FILE_NAME = "ExternalData.xml"
@@ -14,9 +15,9 @@ def run_server(connection):
     while True:
 
         received_data, socket_of_krc = sock.recvfrom(BUFFER_SIZE) # buffer size is 1024 bytes
-        print received_data
-        if not connection.empty():
+        if connection.poll():
             data_to_send = connection.recv()
+            # print data_to_send
         else: # send the default
             data_to_send = default_command
         data_to_send = mirror_timestamp(received_data, data_to_send)
@@ -36,6 +37,3 @@ def mirror_timestamp(received_data, data_to_send):
     old_ipoc = data_to_send[old_ipoc_begin_index + 6: old_ipoc_end_index]
 
     return data_to_send.replace("<IPOC>"+old_ipoc+"</IPOC>", "<IPOC>"+received_ipoc+"</IPOC>")
-
-if __name__ == "__main__":
-    run_server()
