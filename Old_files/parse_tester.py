@@ -1,5 +1,0 @@
-file = open("ExternalData.xml", "r")
-xml_string = file.read()
-ipoc_begin_tag_index = xml_string.index("<IPOC>")
-ipoc_end_tag_index = xml_string.index("</IPOC>")
-print str(int(xml_string[ipoc_begin_tag_index + 6: ipoc_end_tag_index]) + 1).zfill(10)

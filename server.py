@@ -1,28 +1,41 @@
-import socket
-import sys
+"""
+Author: Eren Sezener (erensezener@gmail.com)
+Date: May 17, 2014
 
-UDP_IP = '127.0.0.1'  # IP Address of the External PC
-UDP_PORT = 49152  # Port of the External PC
+Description: Communicates with the KUKA Controller.
+
+Status: Works correctly.
+
+Dependencies:
+
+Known bugs: -
+
+"""
+
+import socket
+
+SERVER_IP = '127.0.0.1'
+SERVER_PORT = 49152
 BUFFER_SIZE = 1024
 XML_FILE_NAME = "ExternalData.xml"
 
-SEND_ROBOT_POSITION_THRU_UDP = True  #Fill the optional parameters if True
+BROADCAST_ROBOT_POSITION = True  #Fill the optional parameters if True
 
-'''Optional Parameters Below'''
-UDP_IP_TO_SEND_ROBOT_POSITION = '127.0.0.1'
-UDP_PORT_TO_SEND_ROBOT_POSITION = 49100
+'''Optional Parameters For Broadcasting'''
+RECEIVER_IP = '127.0.0.1'
+RECEIVER_PORT = 49100
 
 
 def send_robot_data(sock, data):
-    if SEND_ROBOT_POSITION_THRU_UDP is False:
+    if BROADCAST_ROBOT_POSITION is False:
         pass
     else:
-        sock.sendto(data, (UDP_IP_TO_SEND_ROBOT_POSITION, UDP_PORT_TO_SEND_ROBOT_POSITION))
+        sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
 
 
 def run_server(connection):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Create a UDP socket
-    sock.bind((UDP_IP, UDP_PORT))
+    sock.bind((SERVER_IP, SERVER_PORT))
     xml_file = open(XML_FILE_NAME, "r")
     default_command = xml_file.read()
 
@@ -32,7 +45,6 @@ def run_server(connection):
         send_robot_data(sock, received_data)
         if connection.poll():
             data_to_send = connection.recv()
-            # print data_to_send
         else:  # send the default
             data_to_send = default_command
         data_to_send = mirror_timestamp(received_data, data_to_send)

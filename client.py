@@ -1,8 +1,8 @@
 """
 Author: Eren Sezener (erensezener@gmail.com)
-Date: Month Day, 2014
+Date: May 17, 2014
 
-Description: 
+Description: Sends updates to the server.
 
 Status: Works correctly.
 
@@ -13,8 +13,8 @@ Known bugs: -
 """
 import socket
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 5005
+CLIENT_IP = '127.0.0.1'
+CLIENT_PORT = 5005
 BUFFER_SIZE = 1024
 
 HEADER = '<Sen Type=\"ImFree\"><EStr>KRCnexxt - RSI Object ST_ETHERNET</EStr>'
@@ -25,10 +25,11 @@ DEFAULT_AKORR = '<AKorr A1=\"0.0000\" A2=\"0.0000\" A3=\"0.0000\" A4=\"0.0000\" 
 
 def initialize_socket():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((TCP_IP, TCP_PORT))
+    s.bind((CLIENT_IP, CLIENT_PORT))
     s.listen(1)
     conn, addr = s.accept()
     print 'Connection address:', addr
+    return conn
 
 def is_terminate_command(input_text):
     if input_text == 'q' or input_text == 'Q':
@@ -63,22 +64,26 @@ def get_akorr_string(command_list):
 
 def create_command_string(type, command_list):
     if type == 'r':
-        return HEADER + get_rkorr_string(command_list) + DEFAULT_AKORR + FOOTER
+        return HEADER + get_rkorr_string(command_list) + FOOTER
     elif type == 'a':
-        return HEADER + DEFAULT_RKORR + get_akorr_string(command_list) + FOOTER
+        return HEADER + get_akorr_string(command_list) + FOOTER
 
 
 def run_client(connection):
+    sock = initialize_socket()
     while True:
-        input_text = raw_input("Please write the coordinates: ")
-        type, command_list = process_text(input_text)
-        if type is not None:
-            string_to_send = create_command_string(type, command_list)
-            print "Sending"
-            print string_to_send
-            connection.send(string_to_send)
-        elif is_terminate_command(input_text):
-            print "Terminating"
-            return
-        else:
-            print "The command is not valid."
+        input_text = sock.recv(BUFFER_SIZE)
+        sock.send('sent')
+        if input_text:
+            type, command_list = process_text(input_text)
+            if type is not None:
+                string_to_send = create_command_string(type, command_list)
+                print "Sending"
+                print string_to_send
+                connection.send(string_to_send)
+            elif is_terminate_command(input_text):
+                print "Terminating"
+                sock.close()
+                return
+            else:
+                print "The command is not valid."
