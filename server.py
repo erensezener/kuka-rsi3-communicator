@@ -1,24 +1,51 @@
-import socket
-import sys
+"""
+Author: Eren Sezener (erensezener@gmail.com)
+Date: May 17, 2014
 
-UDP_IP = '127.0.0.1' # IP Address of the External PC
-UDP_PORT = 49152 # Port of the External PC
+Description: Communicates with the KUKA Controller.
+
+Status: Works correctly.
+
+Dependencies:
+
+Known bugs: -
+
+"""
+
+import socket
+
+SERVER_IP = '127.0.0.1'
+SERVER_PORT = 49152
 BUFFER_SIZE = 1024
 XML_FILE_NAME = "ExternalData.xml"
 
+BROADCAST_ROBOT_POSITION = True  #Fill the optional parameters if True
+
+'''Optional Parameters For Broadcasting'''
+RECEIVER_IP = '127.0.0.1'
+RECEIVER_PORT = 49100
+
+
+def send_robot_data(sock, data):
+    if BROADCAST_ROBOT_POSITION is False:
+        pass
+    else:
+        sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
+
+
 def run_server(connection):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Create a UDP socket
-    sock.bind((UDP_IP, UDP_PORT))
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Create a UDP socket
+    sock.bind((SERVER_IP, SERVER_PORT))
     xml_file = open(XML_FILE_NAME, "r")
     default_command = xml_file.read()
 
     while True:
 
-        received_data, socket_of_krc = sock.recvfrom(BUFFER_SIZE) # buffer size is 1024 bytes
+        received_data, socket_of_krc = sock.recvfrom(BUFFER_SIZE)  # buffer size is 1024 bytes
+        send_robot_data(sock, received_data)
         if connection.poll():
             data_to_send = connection.recv()
-            # print data_to_send
-        else: # send the default
+        else:  # send the default
             data_to_send = default_command
         data_to_send = mirror_timestamp(received_data, data_to_send)
         sock.sendto(data_to_send, socket_of_krc)
@@ -36,4 +63,4 @@ def mirror_timestamp(received_data, data_to_send):
     old_ipoc_end_index = data_to_send.index("</IPOC>")
     old_ipoc = data_to_send[old_ipoc_begin_index + 6: old_ipoc_end_index]
 
-    return data_to_send.replace("<IPOC>"+old_ipoc+"</IPOC>", "<IPOC>"+received_ipoc+"</IPOC>")
+    return data_to_send.replace("<IPOC>" + old_ipoc + "</IPOC>", "<IPOC>" + received_ipoc + "</IPOC>")
