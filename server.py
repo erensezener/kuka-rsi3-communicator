@@ -13,40 +13,29 @@ Known bugs: -
 """
 
 import socket
-
-SERVER_IP = '10.100.48.101'
-SERVER_PORT = 49152
-BUFFER_SIZE = 1024
-XML_FILE_NAME = "ExternalData.xml"
-ABSOLUTE_CORRECTION = True #False means relative correction
-
-BROADCAST_ROBOT_POSITION = True  #Fill the optional parameters if True
-
-'''Optional Parameters For Broadcasting'''
-RECEIVER_IP = '10.100.48.101'
-RECEIVER_PORT = 49100
+import settings
 
 
 def send_robot_data(sock, data):
-    if BROADCAST_ROBOT_POSITION is False:
+    if settings.BROADCAST_ROBOT_POSITION is False:
         pass
     else:
-        sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
+        sock.sendto(data, (settings.RECEIVER_IP, settings.RECEIVER_PORT))
 
 
 def run_server(connection):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Create a UDP socket
-    sock.bind((SERVER_IP, SERVER_PORT))
-    xml_file = open(XML_FILE_NAME, "r")
+    sock.bind((settings.SERVER_IP, settings.SERVER_PORT))
+    xml_file = open(settings.XML_FILE_NAME, "r")
     default_command = xml_file.read()
 
     while True:
 
-        received_data, socket_of_krc = sock.recvfrom(BUFFER_SIZE)  # buffer size is 1024 bytes
+        received_data, socket_of_krc = sock.recvfrom(settings.BUFFER_SIZE)  # buffer size is 1024 bytes
         send_robot_data(sock, received_data)
         if connection.poll():
             data_to_send = connection.recv()
-            if ABSOLUTE_CORRECTION:
+            if settings.ABSOLUTE_CORRECTION:
                 default_command = data_to_send
         else:  # send the default
             data_to_send = default_command

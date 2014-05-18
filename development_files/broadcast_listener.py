@@ -14,7 +14,7 @@ Known bugs: -
 
 import socket
 
-UDP_IP = '10.100.48.101'
+UDP_IP = '127.0.0.1'
 UDP_PORT = 49100
 
 sock = socket.socket(socket.AF_INET, # Internet

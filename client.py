@@ -12,10 +12,8 @@ Known bugs: -
 
 """
 import socket
+import settings
 
-CLIENT_IP = '10.100.48.101'
-CLIENT_PORT = 5005
-BUFFER_SIZE = 1024
 
 HEADER = '<Sen Type=\"ImFree\"><EStr>KRCnexxt - RSI Object ST_ETHERNET</EStr>'
 FOOTER = '<Tech T21=\"1.09\" T22=\"2.08\" T23=\"3.07\" T24=\"4.06\" T25=\"5.05\" T26=\"6.04\" T27=\"7.03\" ' \
@@ -25,7 +23,7 @@ DEFAULT_AKORR = '<AKorr A1=\"0.0000\" A2=\"0.0000\" A3=\"0.0000\" A4=\"0.0000\" 
 
 def initialize_socket():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((CLIENT_IP, CLIENT_PORT))
+    s.bind((settings.SERVER_IP, settings.CLIENT_PORT))
     s.listen(1)
     conn, addr = s.accept()
     print 'Connection address:', addr
@@ -72,7 +70,7 @@ def create_command_string(type, command_list):
 def run_client(connection):
     sock = initialize_socket()
     while True:
-        input_text = sock.recv(BUFFER_SIZE)
+        input_text = sock.recv(settings.BUFFER_SIZE)
         sock.send('sent')
         if input_text:
             type, command_list = process_text(input_text)
