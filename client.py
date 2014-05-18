@@ -13,7 +13,7 @@ Known bugs: -
 """
 import socket
 
-CLIENT_IP = '127.0.0.1'
+CLIENT_IP = '10.100.48.101'
 CLIENT_PORT = 5005
 BUFFER_SIZE = 1024
 

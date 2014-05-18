@@ -14,15 +14,16 @@ Known bugs: -
 
 import socket
 
-SERVER_IP = '127.0.0.1'
+SERVER_IP = '10.100.48.101'
 SERVER_PORT = 49152
 BUFFER_SIZE = 1024
 XML_FILE_NAME = "ExternalData.xml"
+ABSOLUTE_CORRECTION = True #False means relative correction
 
 BROADCAST_ROBOT_POSITION = True  #Fill the optional parameters if True
 
 '''Optional Parameters For Broadcasting'''
-RECEIVER_IP = '127.0.0.1'
+RECEIVER_IP = '10.100.48.101'
 RECEIVER_PORT = 49100
 
 
@@ -45,6 +46,8 @@ def run_server(connection):
         send_robot_data(sock, received_data)
         if connection.poll():
             data_to_send = connection.recv()
+            if ABSOLUTE_CORRECTION:
+                default_command = data_to_send
         else:  # send the default
             data_to_send = default_command
         data_to_send = mirror_timestamp(received_data, data_to_send)
