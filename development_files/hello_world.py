@@ -34,8 +34,8 @@ while True:
         alpha = alpha -1
         if alpha < -200:
             flag = 0
-    time.sleep(0.01)
-    text = 'a,0,0,0,' + str(alpha*0.2) + ',0,0'
+    #time.sleep(0.005)
+    text = 'a,' + str(alpha*0.2) + ',0,0,0,0,0'
     s.send(text)
     data = s.recv(BUFFER_SIZE)
     print "received data:", data
