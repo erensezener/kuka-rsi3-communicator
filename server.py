@@ -35,7 +35,6 @@ def run_server(connection):
         send_robot_data(sock, received_data)
         if connection.poll():
             data_to_send = connection.recv()
-            #if settings.ABSOLUTE_CORRECTION:
             default_command = data_to_send
         else:  # send the default
             data_to_send = default_command
