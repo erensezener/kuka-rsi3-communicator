@@ -1,6 +1,6 @@
 #What is KUKA RSI-3 Communicator
 
-KUKA RSI-3 Communicator (KR3C) enables controlling KUKA robot manipulators in real-time. KR3C is developed for the Robot Sensor Interface (RSI) 3 add-on. RSI is the official KUKA add-on technology package that is used for data exchange between an external PC and the robot controller. Please note that the content of RSI changed dramaticaly since RSI 2. Therefore, toolboxes written for RSI 2 require significant changes to make it compatible with RSI 3. As of May 2014, KR3C is the only open-source toolbox that enables real-time control via RSI 3.
+KUKA RSI-3 Communicator (KR3C) enables controlling KUKA robot manipulators in real-time from an external PC via UDP protocol. KR3C is developed for the Robot Sensor Interface (RSI) 3 add-on. RSI is the official KUKA add-on technology package that is used for data exchange between an external PC and the robot controller. The content of RSI changed dramatically since RSI 2. Therefore, toolboxes written for RSI 2 require significant changes to make it compatible with RSI 3. As of May 2014, KR3C is the only open-source toolbox that enables real-time control via RSI 3.
 
 #Components
 Basically, KR3C does two things. First, it communicates with the robot controller in a loop by sending XML strings through UDP. If the controller does not receive any strings, it gives a timeout error. Second, it accepts position update commands through another socket; then sends the update commands to the robot controller in the correct XML format.
@@ -18,7 +18,7 @@ The files below are necessary for sending commands to the controller.
 
 6. kuka_files/*: All of these files should be copied to  C:\KRC\Roboter\Config\User\Common\SensorInterface
 
-###Auxillary Components
+###Auxiliary Components
 The files below are examples which can be used to test the KR3C server or to develop applications.
 
 7. development\_files/broadcast_listener.py: listens to KR3C and prints the robot positions
@@ -29,10 +29,10 @@ The files below are examples which can be used to test the KR3C server or to dev
 ##Setting up
 
 1. Copy ./kuka-files/RSI_Ethernet.src to C:\KRC\ROBOTER\KRC\R1\Program
-2. Copy rest of the files (except RSI\_Ethernet.src) in ./kuka\_files to C:\KRC\Roboter\Config\User\Common\SensorInterface in the robot controller. (Selecting Minimize HMI option from the pendant will take you to the Windows interface running on the controller. 
+2. Copy rest of the files (except RSI\_Ethernet.src) in ./kuka\_files to C:\KRC\Roboter\Config\User\Common\SensorInterface in the robot controller. (Selecting Minimize HMI option from the pendant will take you to the Windows interface running on the controller.) 
 3. Make sure that the controller and the external PC are in the same local network.
-4. Set the controllers IP to 10.100.48.100. (Different IP's are also OK as long as the first three quadrants of the controllers IP and the external PC's are the same)
-5. Set your PC's IP to 10.100.48.101. If you want to use a different IP address, make sure to also change the IP's in RSI\_EthernetConfig.xml and settings.py. Defaul gateway should be 255.255.255.0.
+4. Set the controller's IP to 10.100.48.100. (Different IP's are also OK as long as the first three quadrants of the controllers IP and the external PC's are the same)
+5. Set your PC's IP to 10.100.48.101. If you want to use a different IP address, make sure to also change the IP's in RSI\_EthernetConfig.xml and settings.py. Default gateway should be 255.255.255.0.
 
 ##Running
 1. Start the KR3C server by running main.py via ```python main.py```
@@ -66,11 +66,14 @@ ret = RSI_ON(#RELATIVE)
 ```
 Similarly, ```ret = RSI_ON(#ABSOLUTE)``` will enable the Absolute update mode.
 
-Note: In both modes, KR3C caches the last command and sends it repeatedly.
+Note: In both modes, KR3C saves the last command and sends it repeatedly. In Absolute mode, this will cause the robot to stay still. In Relative mode, this will move the robot continuously.
+
+See the RSI 3 manual to learn more about the differences.
 
 ###Position of the Robot Manipulator
 
 Especially in the Relative Update mode, it is important to know the position of the robot manipulator. If ```BROADCAST_ROBOT_POSITION``` is set to True in settings.py, KR3C will send the position of the robot in XML format every 12 ms. Run broadcast\_listener.py to see an example program that listens to KR3C and prints the robot positions.
 
-
-Corresponding developer: Eren Sezener (erensezener@gmail.com)
+###Author
+Eren Sezener (erensezener@gmail.com, erensezener.com)
+Ozyegin University Robotics Laboratory (robotics.ozyegin.edu.tr)
