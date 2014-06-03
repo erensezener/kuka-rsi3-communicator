@@ -5,3 +5,4 @@ client.pyc
 *.pyc
 *.iml
 *~
+.idea
