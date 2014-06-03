@@ -2,10 +2,10 @@
 
 KUKA RSI-3 Communicator (KR3C) enables controlling KUKA robot manipulators in real-time from an external PC via UDP protocol. KR3C is developed for the Robot Sensor Interface (RSI) 3 add-on. RSI is the official KUKA add-on technology package that is used for data exchange between an external PC and the robot controller. The content of RSI changed dramatically since RSI 2. Therefore, toolboxes written for RSI 2 require significant changes to make it compatible with RSI 3. As of May 2014, KR3C is the only open-source toolbox that enables real-time control via RSI 3.
 
-#Components
+##Components
 Basically, KR3C does two things. First, it communicates with the robot controller in a loop by sending XML strings through UDP. If the controller does not receive any strings, it gives a timeout error. Second, it accepts position update commands through another socket; then sends the update commands to the robot controller in the correct XML format.
 
-##Main Components
+###Main Components
 The files below are necessary for sending commands to the controller.
 
 1. main.py: run this program to start the KR3C
