@@ -75,5 +75,5 @@ See the RSI 3 manual to learn more about the differences.
 Especially in the Relative Update mode, it is important to know the position of the robot manipulator. If ```BROADCAST_ROBOT_POSITION``` is set to True in settings.py, KR3C will send the position of the robot in XML format every 12 ms. Run broadcast\_listener.py to see an example program that listens to KR3C and prints the robot positions.
 
 ###Author
-Eren Sezener (erensezener@gmail.com, erensezener.com)
+Eren Sezener (erensezener@gmail.com, erensezener.com)  
 Ozyegin University Robotics Laboratory (robotics.ozyegin.edu.tr)
