@@ -56,7 +56,7 @@ r,0.5,0,0,0,0,0
 command updates the X coordinate by 0.5 mm.
 
 ###Absolute vs Relative Updates
-There are two ways to update the coordinates of the KUKA robot: Absolute and Relative commands. In the Absolute command mode, the coordinates of the robot when RSI is initialized is set as 0,0,0,0,0,0. All updates are given in absolute, that is relative to the initial coordinates. On the contrary, in the Relative command mode, updates are given with respect to the previous configurations.
+There are two ways to update the coordinates of the KUKA robot: Absolute and Relative commands. In the Absolute command mode, the coordinates of the robot when RSI is initialized is set as 0,0,0,0,0,0. All updates are given in absolute, that is relative to the initial coordinates. On the contrary, in the Relative command mode, updates are given with respect to the previous configurations.  
 For example, if you send a,1,0,0,0,0,0 string to the server in the absolute mode, A1 value will initially be increased by 1, then it will remain as 1.
 
 To use the Relative update mode, open RSI\_Ethernet.src and give #RELATIVE as a parameter of RSI_ON().
