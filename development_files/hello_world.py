@@ -23,19 +23,18 @@ BUFFER_SIZE = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 
-alpha = 0
+count = 0
 flag = 0
 while True:
     if flag == 0:
-        alpha = alpha +1
-        if alpha > 200:
+        count = count +1
+        if count > 200:
             flag = 1
     else:
-        alpha = alpha -1
-        if alpha < -200:
+        count = count -1
+        if count < -200:
             flag = 0
-    #time.sleep(0.005)
-    text = 'a,' + str(alpha*0.2) + ',0,0,0,0,0'
+    text = 'a,' + str(0.05) + ',0,0,0,0,0'
     s.send(text)
     data = s.recv(BUFFER_SIZE)
     print "received data:", data
