@@ -24,14 +24,14 @@ BUFFER_SIZE = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 
-w = 2 * math.pi * 0.1
-amp = 3 * math.pi / 180.0
+w = 2 * math.pi * 1.5
+amp = 2 * math.pi / 180.0
 
 count = 0
 while True:
     count = count + 1
     t = 0.004 * count
-    text = 'a,' + str(amp * w * math.cos(w * t)) + ',' + str(amp * w * math.cos(w * t)) + ',' + str(amp * w * math.cos(w * t)) + ',' + str(amp * w * math.cos(w * t)) + ',' + str(amp * w * math.cos(w * t)) + ',' + str(amp * w * math.cos(w * t)) 
+    text = 'a,' + str(amp * w * math.cos(w * t)) + ',0,0,0,0,0'
     s.send(text)
     data = s.recv(BUFFER_SIZE)
     print "received data:", data
