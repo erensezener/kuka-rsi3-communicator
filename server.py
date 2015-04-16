@@ -14,7 +14,9 @@ Known bugs: -
 
 import socket
 import settings
+import time
 
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 def send_robot_data(sock, data):
     if settings.BROADCAST_ROBOT_POSITION is False:
@@ -28,9 +30,11 @@ def run_server(connection):
     sock.bind((settings.SERVER_IP, settings.SERVER_PORT))
     xml_file = open(settings.XML_FILE_NAME, "r")
     default_command = xml_file.read()
-
+    prev_time = current_milli_time()
     while True:
-
+        current_time = current_milli_time()
+        print current_time - prev_time 
+        prev_time = current_time
         received_data, socket_of_krc = sock.recvfrom(settings.BUFFER_SIZE)  # buffer size is 1024 bytes
         send_robot_data(sock, received_data)
         if connection.poll():

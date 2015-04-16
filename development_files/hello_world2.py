@@ -25,12 +25,13 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 
-w = 2 * math.pi * 1.5
-amp = 2 * math.pi / 180.0
+w = 2 * math.pi * 0.5
+amp = 5 * math.pi / 180.0
 
 count = 0
 prev_time = current_milli_time()
 while True:
+    time.sleep(0.0045)
     count = count + 1
     t = 0.004 * count
     text = 'a,' + str(amp * w * math.cos(w * t)) + ',0,0,0,0,0'
