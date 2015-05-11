@@ -6,3 +6,5 @@ client.pyc
 *.iml
 *~
 .idea
+.gitignore
+.DS_Store
