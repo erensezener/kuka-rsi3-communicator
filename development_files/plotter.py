@@ -1,4 +1,4 @@
-filename = 'results.txt'
+filename = 'temp.txt'
 
 import numpy as np
 import matplotlib.pyplot as plt
