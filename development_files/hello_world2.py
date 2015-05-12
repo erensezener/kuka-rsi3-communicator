@@ -25,9 +25,9 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 
-#w = 2 * math.pi * 0.5
-w = 2.0
-amp = 20 * math.pi / 180.0
+w = 2 * math.pi * 0.2
+#w = 2.0
+amp = 5 * math.pi / 180.0
 magic_number = 5.0 / 24.0
 
 count = 0
@@ -36,11 +36,12 @@ while True:
     time.sleep(0.004)
     count = count + 1
     t = 0.004 * count
-    text = 'a,' + str(magic_number * amp * w * math.cos(w * t)) + ',0,0,0,0,0'
+    temp = str(magic_number * amp * w * math.cos(w * t))
+    text = 'a,' + temp +',' + temp + ',' + temp + ',' + temp +',' + temp + ',' + temp
     s.send(text)
     data = s.recv(BUFFER_SIZE)
     cur_time = current_milli_time()
-    print cur_time - prev_time
+#    print cur_time - prev_time
     prev_time = cur_time
 
 s.close()
