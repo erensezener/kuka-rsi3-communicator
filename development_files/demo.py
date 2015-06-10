@@ -2,14 +2,6 @@
 Author: Eren Sezener (erensezener@gmail.com)
 Date: May 22, 2014
 
-Description: This demo program moves the 5th joint.
-
-Status: Works correctly.
-
-Dependencies:
-
-Known bugs: -
-
 """
 
 import socket

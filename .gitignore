@@ -6,3 +6,4 @@ client.pyc
 *.iml
 *~
 .idea
+.DS_Store
