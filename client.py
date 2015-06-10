@@ -81,7 +81,7 @@ def run_client(connection):
                 connection.send(string_to_send)
             elif is_terminate_command(input_text):
                 print "Terminating"
-		sock.shutdown(socket.SHUT_RDWR) # Don't allow reads & writes
+		        sock.shutdown(socket.SHUT_RDWR) # Don't allow reads & writes
                 sock.close()
                 return
             else:
