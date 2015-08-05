@@ -7,8 +7,16 @@ def poly6 (time, tEnd, xStart, xEnd, xDepth) :
     ddxEnd = 0.0;
     dt = 0.004;
 
-    Rt = time - tStart;
+
     Ts = tEnd - tStart;
+    if time > Ts*3 :
+        time = 0
+    if time > Ts*2 :
+        time = time - Ts
+    if time > Ts :
+        time = time - Ts
+        
+    Rt = time - tStart;
 
     n0 = xStart;
     n1 = dxStart;
@@ -18,6 +26,7 @@ def poly6 (time, tEnd, xStart, xEnd, xDepth) :
     n5 = -(((7*ddxStart)/2 + (5*ddxEnd)/2)*Ts**2 + (33*dxStart - 27*dxEnd)*Ts + 102*xStart + 90*xEnd - 192*xDepth)/Ts**5;
     n6 = ((ddxStart + ddxEnd)*Ts**2 + (10*dxStart - 10*dxEnd)*Ts + 32*xStart + 32*xEnd - 64*xDepth)/Ts**6
 
+     
     if time < (tStart - dt*0.25) :
         Pos = xStart
 	Vel = dxStart
