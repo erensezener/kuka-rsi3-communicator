@@ -17,14 +17,13 @@ The files below are necessary for sending commands to the controller.
 ###Kuka Controller Components 
 
 6. kuka_files/*: All of these files should be copied to  C:\KRC\Roboter\Config\User\Common\SensorInterface
+(To be updated)
 
 ###Auxiliary Components
 The files below are examples which can be used to test the KR3C server or to develop applications.
 
-7. development\_files/broadcast_listener.py: listens to KR3C and prints the robot positions
-8. development\_files/kuka_emulator.py: acts like the robot controller, prints the coordinates
-9. development\_files/tcp_sender.py: gets update values (such as ```a,0,0,0,0,0,0.5```) and sends them to KR3C
-10. development\_files/hello_world.py: moves a joint back and forth
+7. development\_files/kuka_emulator.py: acts like the robot controller, prints the coordinates
+8. development\_files/tcp_sender.py: gets update values (such as ```a,0,0,0,0,0,0.5```) and sends them to KR3C
 
 ##Setting up
 
@@ -36,9 +35,13 @@ The files below are examples which can be used to test the KR3C server or to dev
 
 ##Running
 1. Start the KR3C server by running main.py via ```python main.py```
-2. Select RSI_Ethernet.src, and execute commands until RSI\_MOVECORR(). When there are warnings click on "Confirm All".
+2. Select RSI_Ethernet.src from the pad, and execute commands until RSI\_MOVECORR(). When there are warnings click on "Confirm All".
 3. If RSI\_MOVECORR() does not raise an error, then you have successfully started the communication.
-4. Send command strings to the KR3C server through TCP to update the position of the robot manipulator. See Position Update Commands section for more information. Use hello\_world.py to see an example.
+4. Send command strings to the KR3C server through TCP to update the position of the robot manipulator. See Position Update Commands section for more information. Use demo.py to see a demo. 
+5. See demo.py to see an example of getting the current position. It prints the output to stdout. You can redirect the output to a file or a pipe if needed.
+```
+demo.py > log.txt  
+```
 
 ###Position Update Commands
 
@@ -49,7 +52,7 @@ a,0,0,0,0,0,0.5
 ```
 Here, 'a' stands for angle and implies that the values are angle corrections. There are 6 values and they respectively correspond to A1, A2,.., A6. The example above, updates the angle of the 6th axis by 0.5 degrees.
 
-It is possible to send cartesian coordinate corrections. To do this, configuration files on the controller should be modified accordingly, and the command strings should start with 'r' instead of 'a'. For example, 
+It is possible to send cartesian coordinate corrections. To do this, change the xml setting file from RSI_Ethernet.src file. And the command strings should start with 'r' instead of 'a'. For example, 
 ```
 r,0.5,0,0,0,0,0
 ```
@@ -59,21 +62,35 @@ command updates the X coordinate by 0.5 mm.
 There are two ways to update the coordinates of the KUKA robot: Absolute and Relative commands. In the Absolute command mode, the coordinates of the robot when RSI is initialized is set as 0,0,0,0,0,0. All updates are given in absolute, that is relative to the initial coordinates. On the contrary, in the Relative command mode, updates are given with respect to the previous configurations.  
 For example, if you send a,1,0,0,0,0,0 string to the server in the absolute mode, A1 value will initially be increased by 1, then it will remain as 1.
 
-To use the Relative update mode, open RSI\_Ethernet.src and give #RELATIVE as a parameter of RSI_ON().
+To change the update mode, open RSI\_Ethernet.src and give #RELATIVE or #ABSOLUTE as a parameter of RSI_ON().
 
 ```
+# use one of the below
 ret = RSI_ON(#RELATIVE)
+ret = RSI_ON(#ABSOLUTE)
 ```
-Similarly, ```ret = RSI_ON(#ABSOLUTE)``` will enable the Absolute update mode.
 
-Note: In both modes, KR3C saves the last command and sends it repeatedly. In Absolute mode, this will cause the robot to stay still. In Relative mode, this will move the robot continuously.
+Note: In both modes, KR3C saves the last command and sends it repeatedly. In Absolute mode, this will cause the robot to stay still. In Relative mode, this will move the robot continuously. As a general advice use of absolute mode is more preferable.
 
 See the RSI 3 manual to learn more about the differences.
 
-###Position of the Robot Manipulator
 
-Especially in the Relative Update mode, it is important to know the position of the robot manipulator. If ```BROADCAST_ROBOT_POSITION``` is set to True in settings.py, KR3C will send the position of the robot in XML format every 12 ms. Run broadcast\_listener.py to see an example program that listens to KR3C and prints the robot positions.
+###Using a Custom Trajectory
 
-###Author
-Eren Sezener (erensezener@gmail.com, erensezener.com)  
+Put your trajectory functions in generateTrajectory.py. Your generator functions should take the current time as input as it will be called each cycle. A sample usage is shown in demo.py  
+
+
+##Troubleshooting
+If your angle or cartesian references are not appropriate you will get torque errors. Make sure your reference position is realizable in 4 msec. If you need to run just a little faster try to run it at T2 or AUTO mode (see Kuka docs).
+
+Another error you may get is out of workspace error. Workspace limits are set conservatively to be on the safe side. If you need to change the limits, update the rsi file and upload it to SensorInterface folder again.
+
+When using cartesian control make sure your trajectory does not get close to singular points. If your home position is at singularity it will give torque error for 2 joints because they are aligned. If it stops suddenly with torque error while moving, you will know it from the alignment.
+
+###Authors
+Eren Sezener (erensezener@gmail.com, erensezener.com)
+
+Osman Kaya (osmankaya89@gmail.com)
+
 Ozyegin University Robotics Laboratory (robotics.ozyegin.edu.tr)
+

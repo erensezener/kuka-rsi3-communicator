@@ -4,6 +4,8 @@ client.pyc
 .idea/misc.xml
 *.pyc
 *.iml
+**/*.swp
 *~
+**/log**
 .idea
 .DS_Store

@@ -26,7 +26,6 @@ def initialize_socket():
     s.bind((settings.SERVER_IP, settings.CLIENT_PORT))
     s.listen(1)
     conn, addr = s.accept()
-    print 'Connection address:', addr
     return conn
 
 def is_terminate_command(input_text):
@@ -76,12 +75,12 @@ def run_client(connection):
             type, command_list = process_text(input_text)
             if type is not None:
                 string_to_send = create_command_string(type, command_list)
-                print "Sending"
-                print string_to_send
+                #print "Sending"
+                #print string_to_send
                 connection.send(string_to_send)
             elif is_terminate_command(input_text):
                 print "Terminating"
-		        sock.shutdown(socket.SHUT_RDWR) # Don't allow reads & writes
+		sock.shutdown(socket.SHUT_RDWR) # Don't allow reads & writes
                 sock.close()
                 return
             else:
